@@ -1,0 +1,61 @@
+version: '2'
+services:
+  php:
+    image: testin-dataset
+    container_name: testin-dataset
+    depends_on:
+      - db
+    volumes:
+    - ~/.composer-docker/cache:/root/.composer/cache:delegated
+    - ./:/var/www/dataset:delegated
+    - ../dataset-web/:/var/www/dataset-web:delegated
+    - ./vagrant/nginx/dataset.conf:/etc/nginx/sites-enabled/dataset.conf
+    ports:
+    - '80:80'
+    - '8080:8080'
+    restart: always
+  db:
+    image: mysql:5.7
+    restart: always
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+    - "./data/db_data:/var/lib/mysql"
+    - "./data/init:/docker-entrypoint-initdb.d/"
+    ports:
+    - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+  redis:
+    image: redis
+    container_name: redis
+    restart: always
+    ports:
+    - 6379:6379
+    volumes:
+     - ./data/redis_data:/data:rw
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    ports:
+    - "8888:9000"
+    restart: always
+    command: server /data
+    environment:
+      MINIO_ACCESS_KEY: admin
+      MINIO_SECRET_KEY: admin123 #大于等于8位
+    logging:
+      options:
+        max-size: "150M"
+        max-file: "10"
+      driver: json-file
+    volumes:
+    - ./data/minIO_data:/data
+  es:
+    image: elasticsearch:latest
+    container_name: elasticsearch
+    ports:
+    - "9200:9200"
+    restart: always
+    volumes:
+    - ./data/es_data:/home/elasticsearch/elasticsearch-7.9.0/data
