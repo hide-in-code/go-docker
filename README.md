@@ -1,7 +1,7 @@
 # 使用方法：
 
 ### 读取数据
-
+```golang
   	yamlFile, err := ioutil.ReadFile("docker-compose.yml")
 	if err != nil {
 	    log.Printf("yamlFile.Get err #%v ", err)
@@ -15,10 +15,10 @@
 
 	fmt.Println(conf.Version)
 	fmt.Println(conf.Services["db"].Environment)
-  
+```	
   
 ### 修改数据
-
+```golang
 	d, err := yaml.Marshal(conf)
 	if err != nil {
 	    log.Fatalf("error: %v", err)
@@ -33,3 +33,4 @@
 	if err != nil {
 	    fmt.Printf("permission denied![%v]\n", err)
 	}
+```
