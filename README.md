@@ -1,6 +1,6 @@
-#使用方法：
+# 使用方法：
 
-###读取数据
+### 读取数据
 
   	yamlFile, err := ioutil.ReadFile("docker-compose.yml")
 	if err != nil {
@@ -17,7 +17,7 @@
 	fmt.Println(conf.Services["db"].Environment)
   
   
-###修改数据
+### 修改数据
 
 	d, err := yaml.Marshal(conf)
 	if err != nil {
